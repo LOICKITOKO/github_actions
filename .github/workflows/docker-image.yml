@@ -25,5 +25,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.set_image_name.outputs.IMAGE_NAME }}
-
+          tags: ${{ steps.set_image_name.outputs.IMAGE_NAME | lower }}
