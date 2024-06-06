@@ -19,7 +19,7 @@ jobs:
       - name: Set up Image Name
         id: set_image_name
         run: |
-          echo "::set-output name=IMAGE_NAME::ghcr.io/${{ github.repository_owner }}/docker-image:latest"
+           echo "::set-output name=IMAGE_NAME::ghcr.io/${{ github.repository_owner }}/docker-image:latest"
       - name: Build and Push Docker image
         uses: docker/build-push-action@v2
         with:
