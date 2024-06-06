@@ -8,23 +8,28 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v2
+      
       - name: set up docker buildx
         uses: docker/setup-buildx-action@v1
+
       - name: login to github container registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.cr_pat }}
+      
       - name: set up image name
         id: set_image_name
         run: |
-          image_name="ghcr.io/${lowercase_owner,,}/docker-image:latest"
-          echo "image_name=${image_name}" >> $GITHUB_ENV
+          image_name="ghcr.io/${{ github.repository_owner }}/docker-image:latest"
+          image_name_lowercase=$(echo "$image_name" | tr '[:upper:]' '[:lower:]')
+          echo "image_name=${image_name_lowercase}" >> $GITHUB_ENV
+      
       - name: build and push docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ steps.set_image_name.outputs.image_name }}
+          tags: ${{ env.image_name }}
 
