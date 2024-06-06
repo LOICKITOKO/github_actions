@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: build and push docker image
 on: push
 
 jobs:
@@ -6,24 +6,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: checkout repository
         uses: actions/checkout@v2
-      - name: Set up Docker Buildx
+      - name: set up docker buildx
         uses: docker/setup-buildx-action@v1
-      - name: Login to GitHub Container Registry
+      - name: login to github container registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT }}
-      - name: Set up Image Name
+          password: ${{ secrets.cr_pat }}
+      - name: set up image name
         id: set_image_name
         run: |
-                IMAGE_NAME="ghcr.io/${LOWERCASE_OWNER,,}/docker-image:latest"
-                echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
-        - name: Build and Push Docker image
+          image_name="ghcr.io/${lowercase_owner,,}/docker-image:latest"
+          echo "image_name=${image_name}" >> $GITHUB_ENV
+      - name: build and push docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ steps.set_image_name.outputs.IMAGE_NAME | lower }}
+          tags: ${{ steps.set_image_name.outputs.image_name }}
+
